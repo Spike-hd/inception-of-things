@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app1-config
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>App 1</title>
+    </head>
+    <body>
+        <h1>Bienvenue sur app1.com !</h1>
+        <p>Ceci est l'application numero 1.</p>
+    </body>
+    </html>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app1-deployment
+spec:
+  replicas: 1 # Nombre de pods (instances) à lancer
+  selector:
+    matchLabels:
+      app: app1 # Doit correspondre au 'selector' de ton app1-service.yaml
+  template:
+    metadata:
+      labels:
+        app: app1
+    spec:
+      containers:
+      - name: nginx-app1
+        image: nginx:alpine # Image légère de Nginx
+        ports:
+        - containerPort: 80 # Le port sur lequel Nginx écoute dans le conteneur
+        volumeMounts:
+        - name: html-volume
+          mountPath: /usr/share/nginx/html # Dossier où Nginx lit ses pages web
+      volumes:
+      - name: html-volume
+        configMap:
+          name: app1-config # On lie le ConfigMap créé au-dessus à ce volume

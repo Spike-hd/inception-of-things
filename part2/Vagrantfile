@@ -1,0 +1,32 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define "hduflosS" do |s|
+    s.vm.box = "bento/ubuntu-24.04"
+    s.vm.hostname = "hduflosS"
+    s.vm.network "private_network", ip: "192.168.56.110"
+
+    s.vm.provider "vmware_fusion" do |vm|
+      vm.memory = "1024"
+      vm.cpus = 1
+    end
+
+    s.vm.provision "shell", inline: <<-SHELL
+      mkdir -p /etc/rancher/k3s
+      echo "TestToken42" > /etc/rancher/k3s/token
+      curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --node-ip=192.168.56.110 --bind-address=192.168.56.110" K3S_TOKEN="TestToken42" sh -
+      
+      sleep 15
+      kubectl apply -f /vagrant/app1-deployment.yaml
+      kubectl apply -f /vagrant/app1-service.yaml
+      kubectl apply -f /vagrant/app2-deployment.yaml
+      kubectl apply -f /vagrant/app2-service.yaml
+      kubectl apply -f /vagrant/app3-deployment.yaml
+      kubectl apply -f /vagrant/app3-service.yaml
+      kubectl apply -f /vagrant/ingress.yaml
+    SHELL
+  end
+end
+
