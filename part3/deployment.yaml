@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment # Juste le nom du déploiement 
+  namespace: dev 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test 
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+      - name: test-container
+        image: python:3.9-slim
+        ports:
+        - containerPort: 8888
+
+
+

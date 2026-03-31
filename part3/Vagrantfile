@@ -1,0 +1,22 @@
+Vagrant.configure("2") do |config|
+  # Utilisation de la box arm64 compatible avec ton Mac M1/M2/M3
+  config.vm.box = "bento/ubuntu-24.04"
+  config.vm.hostname = "argo-machine"
+
+  # Port Forwarding : On relie les ports de ta machine physique à ceux de la VM
+  # Port 8888 : Pour accéder à l'application wil42/playground
+  config.vm.network "forwarded_port", guest: 8888, host: 8888, host_ip: "127.0.0.1"
+  
+  # Port 8080 : Pour accéder à l'interface graphique d'Argo CD (via notre tunnel scripté)
+  config.vm.network "forwarded_port", guest: 8080, host: 8080, host_ip: "127.0.0.1"
+
+  # Configuration VMware (comme pour la partie 1 et 2)
+  config.vm.provider "vmware_desktop" do |v|
+    v.gui = false
+    v.vmx["memsize"] = "2048" # 2 Go de RAM c'est parfait pour K3d + ArgoCD
+    v.vmx["numvcpus"] = "2"   # 2 coeurs
+  end
+
+  # Le script magique qui va tout installer au lancement de la VM
+  config.vm.provision "shell", path: "script.sh"
+end

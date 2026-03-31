@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-name
+  namespace: dev
+spec:
+  selector:
+    app: test # c'est le nom qu'on a donné au label de l'application dans le Deployment
+  ports:
+    - port: 8888       # Le port exposé par ce Service
+      targetPort: 8888 # Le port du conteneur défini dans le Deployment
+  type: ClusterIP

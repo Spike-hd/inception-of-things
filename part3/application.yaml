@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-app # nom de l'application dans Argo CD
+  namespace: argocd
+spec:
+  project: default 
+  source:
+    repoURL: 'https://github.com/Spike-hd/inception-of-things.git'
+    targetRevision: HEAD # ou une branche spécifique exmple main, etc.
+    path: part3
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: dev
+  # syncPolicy: permet d'automatiser la synchronisation entre le repo Git et le cluster Kubernetes
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true # Crée le namespace 'dev' s'il n'existe pas
+    automated: 
+      prune: true     # supprime les ressources qui n'existent plus dans GitHub
+      selfHeal: true  # remet à jour si quelqu'un modifie manuellement le cluster
+
+
+
