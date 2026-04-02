@@ -15,9 +15,9 @@ spec:
     spec:
       containers:
       - name: playground-app
-        image: wil42/playground:v1
+        image: nginx:alpine # Image officielle compatible ARM64 (Mac M1/M2/M3)
         ports:
-        - containerPort: 8888
+        - containerPort: 80 # Nginx écoute par défaut sur le 80
 
 
 
