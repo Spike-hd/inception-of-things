@@ -3,6 +3,11 @@
 set -e  # Arrête le script si une commande échoue
 
 echo "=== Mise à jour du système ==="
+# Fix DNS pour éviter le crash "no such host" de K3d vers GitHub
+rm -f /etc/resolv.conf
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+
 apt-get update -y
 apt-get upgrade -y
 
@@ -39,9 +44,9 @@ curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/
 chmod +x /usr/local/bin/argocd
 
 echo "=== Création du cluster K3d ==="
-# On retire l'exposition sur le port 8080 car on va utiliser ce port directement pour ArgoCD avec un tunnel.
+# On map le port 8888 de la VM vers le port 80 (Traefik) du cluster !
 k3d cluster create mycluster \
-    --port "8888:8888@loadbalancer"
+    --port "8888:80@loadbalancer"
 
 echo "=== Configuration de kubectl ==="
 k3d kubeconfig merge mycluster --kubeconfig-switch-context

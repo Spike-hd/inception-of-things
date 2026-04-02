@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deployment # Juste le nom du déploiement 
+  name: playground-deployment # Juste le nom du déploiement 
   namespace: dev 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: test 
+      app: playground 
   template:
     metadata:
       labels:
-        app: test
+        app: playground
     spec:
       containers:
-      - name: test-container
-        image: python:3.9-slim
+      - name: playground-app
+        image: wil42/playground:v1
         ports:
         - containerPort: 8888
 

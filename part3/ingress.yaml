@@ -12,6 +12,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: service-name # Le nom EXACT du Service créé juste au-dessus
+            name: playground-service # Le nom EXACT du Service créé juste au-dessus
             port:
               number: 8888 # Le port exposé par ce Service
