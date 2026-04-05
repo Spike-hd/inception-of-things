@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: playground-ingress
+  namespace: dev
+spec:
+  ingressClassName: traefik
+  rules:
+  - http: # On ne met pas de "host" précis, ça attrapera "localhost" ou n'importe quel domaine pointant vers la machine
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: playground-service # Le nom EXACT du Service créé juste au-dessus
+            port:
+              number: 8888 # Le port exposé par ce Service

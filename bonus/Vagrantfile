@@ -5,13 +5,15 @@ Vagrant.configure("2") do |config|
   # Port Forwarding : Mac <-> VM
   # Port 8888 : Pour accéder à l'application wil42/playground (ici Nginx)
   config.vm.network "forwarded_port", guest: 8888, host: 8888, host_ip: "127.0.0.1"
-  # Port 8080 : Pour accéder à l'interface graphique d'Argo CD (via notre tunnel scripté)
+  # Port 8080 : Pour accéder à l'interface graphique d'Argo CD 
   config.vm.network "forwarded_port", guest: 8080, host: 8080, host_ip: "127.0.0.1"
+  # Port 8081 : Pour accéder à l'interface graphique de Gitlab
+  config.vm.network "forwarded_port", guest: 8081, host: 8081, host_ip: "127.0.0.1"
 
   config.vm.provider "vmware_desktop" do |v|
     v.gui = false
-    v.vmx["memsize"] = "2048" # 2 Go de RAM
-    v.vmx["numvcpus"] = "2"   # 2 coeurs
+    v.vmx["memsize"] = "6144" # 6 Go de RAM
+    v.vmx["numvcpus"] = "4"   # 4 coeurs
   end
 
   config.vm.provision "shell", path: "script.sh"

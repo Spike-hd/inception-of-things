@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: playground-service
+  namespace: dev
+spec:
+  selector:
+    app: playground # c'est le nom qu'on a donné au label de l'application dans le Deployment
+  ports:
+    - port: 8888       # Le port exposé par ce Service pour l'Ingress
+      targetPort: 80 # On redirige enfin vers le vrai port par défaut de Nginx (80)
+  type: ClusterIP

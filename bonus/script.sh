@@ -51,6 +51,7 @@ k3d kubeconfig merge mycluster --kubeconfig-switch-context
 echo "=== Création des namespaces ==="
 kubectl create namespace argocd
 kubectl create namespace dev
+kubectl create namespace gitlab
 
 echo "=== Installation de Argo CD ==="
 # Utilisation de --server-side pour éviter la limite de 256ko (262144 bytes) sur les annotations K8s
